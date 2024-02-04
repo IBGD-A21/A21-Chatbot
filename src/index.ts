@@ -5,7 +5,6 @@ import { TagParticipant } from "./types";
 const qrCode = require("qrcode-terminal");
 const fs = require("fs");
 
-const filter1 = ["5218114121718", "5218121992617"];
 const GROUP_NAME = "Biejos jotos y Divas frustradas";
 const message = "IGNOREN ESTE MENSAJE";
 
@@ -30,6 +29,9 @@ client.on("ready", async () => {
   console.log("ready");
 });
 
+const activeMembers = ["5218114121718", "5218120395543", "5218115292728"];
+const ghostMembers = ["5218115706447", "5218184998480", "5218121992617"];
+
 client.on("message_create", async (data: Message) => {
   if (data.from !== CONTACT_RECEIVER) return;
 
@@ -43,13 +45,15 @@ client.on("message_create", async (data: Message) => {
   const a21Group = allChats.filter((chat) => chat.isGroup && chat.name === GROUP_NAME)[0] as GroupChat;
   const allGroupMembers = a21Group.participants;
 
-  const owo: TagParticipant = {
-    everyone: allGroupMembers,
-    active: [],
-    ghosts: []
+  const filters: TagParticipant = {
+    "@everyone": (() => allGroupMembers.map((member) => member.id.user))(),
+    "@active": activeMembers,
+    "@ghosts": ghostMembers,
   };
 
-  const filteredMembers = allGroupMembers.filter((member) => filter1.includes(member.id.user));
+  let selectedFilter = filters[tagCommand];
+
+  const filteredMembers = allGroupMembers.filter((member) => selectedFilter.includes(member.id.user));
 
   const contacts = await Promise.all<Contact>(filteredMembers.map(async (contact) => await client.getContactById(contact.id._serialized)));
 
