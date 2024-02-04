@@ -1,4 +1,3 @@
-import { KeyGroupParticipant } from "./key-group-participant";
-import { TagName } from "./tag-name.type";
+import { Tag } from "./tag.type";
 
-export interface TagParticipant extends KeyGroupParticipant<TagName> {}
+export type TagParticipant = Record<Tag, string[]>;
