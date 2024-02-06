@@ -1,0 +1,1 @@
+export type EventListener = (...args) => Promise<void> | void;

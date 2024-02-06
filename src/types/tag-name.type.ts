@@ -1,1 +1,1 @@
-export type TagName = "everyone" | "active" | "ghosts";
+export type TagName = "everyone" | "active" | "ghosts" | "me";
