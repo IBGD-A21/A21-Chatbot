@@ -7,7 +7,7 @@ import { environment } from "../../envs/environment.dev";
 export const onMessage = async (props: OnMessage) => {
   const { body, client, from } = props;
 
-  if (from !== environment.contactReceiver) return;
+  if (!environment.contactReceiver.includes(from)) return;
 
   const [tagCommand, message] = getCommand(body);
 
