@@ -4,3 +4,5 @@ node_modules/
 .wwebjs_cache/
 
 public/
+
+src/envs/environment.dev.ts
