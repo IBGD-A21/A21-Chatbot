@@ -1,1 +1,3 @@
-export type TagName = "everyone" | "active" | "ghosts" | "me";
+import { TAGS } from "../constants";
+
+export type TagName = (typeof TAGS)[number];
