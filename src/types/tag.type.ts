@@ -1,3 +1,3 @@
-import { TAGS } from "../constants";
+import { TagName } from "./tag-name.type";
 
-export type Tag = `@${(typeof TAGS)[number]}`;
+export type Tag = `@${TagName}`;
