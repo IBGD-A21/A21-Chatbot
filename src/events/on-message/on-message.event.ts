@@ -5,7 +5,10 @@ import { OnMessage } from "./on-message.type";
 import { environment } from "../../envs/environment.dev";
 
 export const onMessage = async (props: OnMessage) => {
-  const { body, client, from } = props;
+  const { body, client, from, to } = props;
+
+  console.log("\n\n****** NEW MESSAGE ******");
+  console.table({ from, to, body });
 
   if (!environment.contactReceiver.includes(from)) return;
 
