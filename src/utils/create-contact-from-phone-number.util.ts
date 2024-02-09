@@ -1,1 +1,1 @@
-export const createContactFromPhoneNumber = (phoneNumber: string | number) => `${phoneNumber}@c.us`;
+export const createContactFromPhoneNumber = (phoneNumber: string | number) => `521${phoneNumber}@c.us`;
