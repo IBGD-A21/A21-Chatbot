@@ -10,7 +10,7 @@ export const onMessage = async (props: OnMessage) => {
   console.log("\n\n****** NEW MESSAGE ******");
   console.table({ from, to, body });
 
-  if (!environment.contactReceiver.includes(from)) return;
+  if (!environment.contactReceivers.includes(from)) return;
 
   const [tagCommand, message] = getCommand(body);
 
