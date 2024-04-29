@@ -1,6 +1,6 @@
 import { Contact, GroupChat } from "whatsapp-web.js";
-import { getCommand, isTagCommand, tagMessage } from "../../utils";
-import { TagParticipant } from "../../types";
+import { getCommand, isTag, isTagCommand, tagMessage } from "../../utils";
+import { Tag, TagParticipant } from "../../types";
 import { OnMessage } from "./on-message.type";
 import { environment } from "../../envs/environment.dev";
 
@@ -12,11 +12,11 @@ export const onMessage = async (props: OnMessage) => {
 
   if (!environment.contactReceivers.includes(from)) return;
 
-  const [tagCommand, message] = getCommand(body);
+  const [tagCommands, message] = getCommand(body);
 
-  if (!tagCommand || !message) return;
+  if (!tagCommands || tagCommands.length === 0 || !message) return;
 
-  if (!isTagCommand(tagCommand)) return;
+  if (tagCommands.some((tagCommand) => !isTagCommand(tagCommand))) return;
 
   const allChats = await client.getChats();
   const a21Group = allChats.filter((chat) => chat.isGroup && chat.name === environment.groupName)[0] as GroupChat;
@@ -29,14 +29,17 @@ export const onMessage = async (props: OnMessage) => {
     "@me": environment.myNumber,
   };
 
-  let selectedFilter = tags[tagCommand];
+  const filterKey = tagCommands.find((tag) => isTag(tag)) as Tag;
+
+  let selectedFilter = tags[filterKey || "@everyone"];
 
   const filteredMembers = allGroupMembers.filter((member) => selectedFilter.includes(member.id.user));
 
   const contacts = await Promise.all<Contact>(filteredMembers.map(async (contact) => await client.getContactById(contact.id._serialized)));
 
   if (contacts) {
+
     console.log("SENT MESSAGE", tagMessage(contacts, message));
-    const messageSent = await a21Group.sendMessage(tagMessage(contacts, message), { mentions: contacts });
+    // const messageSent = await a21Group.sendMessage(tagMessage(contacts, message), { mentions: contacts });
   }
 };

@@ -1,3 +1,7 @@
-import { TagName } from "./tag-name.type";
+import { TagName, TagActionName } from ".";
 
 export type Tag = `@${TagName}`;
+
+export type ActionTag = `@${TagActionName}`;
+
+export type AllTags = Tag | ActionTag;

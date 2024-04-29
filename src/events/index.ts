@@ -10,7 +10,7 @@ export const clientEvents: Partial<Record<Events, EventListener>> = {
   // [Events.AUTHENTICATION_FAILURE]: undefined,
   [Events.READY]: onReady,
   [Events.MESSAGE_RECEIVED]: onMessage,
-  // [Events.MESSAGE_CREATE]: onCreateMessage,
+  [Events.MESSAGE_CREATE]: onMessage,
   // [Events.MESSAGE_REVOKED_EVERYONE]: undefined,
   // [Events.MESSAGE_REVOKED_ME]: undefined,
   // [Events.MESSAGE_ACK]: undefined,

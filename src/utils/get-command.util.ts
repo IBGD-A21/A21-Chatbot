@@ -1,6 +1,11 @@
-import { Tag } from "../types";
+import { isTagCommand } from ".";
+import { AllTags } from "../types";
 
-export const getCommand = (string: string): [Tag, string] | [] => {
-  const [tagCommand, ...message] = string.split("|");
-  return tagCommand || message ? [tagCommand.trim() as Tag, message.join("|").trim()] : [];
+export const getCommand = (input: string): [AllTags[], string] => {
+  const inputMessage = input.split(" ");
+
+  const commands = inputMessage.filter((tag) => isTagCommand(tag as AllTags)) as AllTags[];
+  const message = inputMessage.filter((tag) => !isTagCommand(tag as AllTags)).join(" ");
+
+  return [commands, message];
 };

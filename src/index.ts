@@ -1,5 +1,6 @@
-import { Client, LocalAuth } from "whatsapp-web.js";
+import { Client, LocalAuth } from "../node_modules/whatsapp-web.js";
 import { clientEvents } from "./events";
+import { reminder } from "./services/index";
 
 const wwebVersion = '2.2412.54';
 const client = new Client({
@@ -17,3 +18,5 @@ for (const event in clientEvents) {
   const $event = clientEvents[event];
   client.on(event, $event);
 }
+
+reminder();
