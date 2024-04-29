@@ -1,6 +1,6 @@
 import { Contact, GroupChat } from "whatsapp-web.js";
-import { getCommand, isTag, isTagCommand, tagMessage } from "../../utils";
-import { Tag, TagParticipant } from "../../types";
+import { getCommand, isActionTag, isTag, isTagCommand, tagMessage } from "../../utils";
+import { AllTags, Tag, TagParticipant } from "../../types";
 import { OnMessage } from "./on-message.type";
 import { environment } from "../../envs/environment.dev";
 
@@ -28,6 +28,15 @@ export const onMessage = async (props: OnMessage) => {
     "@ghosts": environment.inactiveMembers,
     "@me": environment.myNumber,
   };
+
+  // Reminders
+  {
+    if (!tagCommands.some((tag: AllTags) => isActionTag(tag))) return;
+    const reminderActions = tagCommands.filter(tag => isActionTag(tag));
+  }
+
+
+
 
   const filterKey = tagCommands.find((tag) => isTag(tag)) as Tag;
 
