@@ -1,4 +1,7 @@
-export type { Pray, Prays, PrayWidthId } from "./interfaces";
-export { PRAYS } from "./constants";
+export type { Reminder as Pray, Reminders as Prays, PrayWidthId } from "./interfaces";
+
+export { REMINDERS as PRAYS } from "./constants";
+
 export { onSavePray } from "./prays.service";
-export { reminder } from "./reminder.service";
+
+export { onCreateReminders as onInitReminders } from "./reminder.service";

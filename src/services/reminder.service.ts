@@ -1,24 +1,52 @@
-import { schedule } from "node-cron";
-import { PRAYS } from "./constants";
+import * as cron from "node-cron";
+import { REMINDERS } from "./constants";
+import { Reminder, Reminders } from "./interfaces";
 
-const reminders: any[] = [];
+export const reminders: Reminders = [];
 
-export const reminder = () => {
-  // schedule("", () => {
-  //     PRAYS.forEach((pray) => console.log(`${pray.from || "anonymous"}. ${pray.title || ""}, ${pray.message}`));
-  //   },
-  //   { scheduled: true }
-  // );
+export const onCreateReminders = () => {
+  // onStopReminders();
+
+  REMINDERS.forEach((reminder, index) => {
+    const task = cron.schedule(
+      reminder.date,
+      () => {
+        console.log(`${index + 1} ~ REMINDER\nDe: ${reminder.from}\n"${reminder.title?.toUpperCase()}. ${reminder.message}"\n\n`);
+      },
+      { scheduled: true }
+    );
+
+    task.start();
+  });
 };
 
-const onNewRemind = (newRemind: unknown) => {
+export const onInitReminders = () => {
+  if (reminders.length === 0) return;
+
+  REMINDERS.forEach((reminder) => {
+    const task = cron.schedule(reminder.date, () => {});
+    task.start();
+  });
+
+  console.info("Reminders Init");
+};
+
+export const onStopReminders = () => {
+  REMINDERS.forEach((reminder) => {
+    const task = cron.schedule(reminder.date, () => {});
+    task.stop();
+  });
+
+  console.info("Reminders Stopped");
+};
+
+export const getAllReminders = () => cron.getTasks();
+
+export const onNewRemind = (newRemind: Reminder) => {
   reminders.push(newRemind);
+
+  console.info("Reminder Added");
+  onCreateReminders();
 };
 
 const onDeleteReminder = () => {};
-
-// @pray | Rodrigo | Hola!. oren para que esto jale
-
-// @everyone recordatorio manual
-// @pray Yo?. recordatorio manual
-// @reminder @everyone este es un recordatorio generico

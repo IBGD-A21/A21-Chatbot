@@ -1,10 +1,10 @@
-import { PRAYS } from "./constants";
-import { Pray, PrayWidthId } from "./interfaces";
+import { REMINDERS } from "./constants";
+import { Reminder, PrayWidthId } from "./interfaces";
 
-export const onSavePray = (newPray: Pray) => {
+export const onSavePray = (newPray: Reminder) => {
   const newPrayTemp: PrayWidthId = {
-    id: String(PRAYS.length),
+    id: String(REMINDERS.length),
     ...newPray,
   };
-  newPray && PRAYS.push(newPrayTemp);
+  newPray && REMINDERS.push(newPrayTemp);
 };

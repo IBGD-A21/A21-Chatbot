@@ -3,6 +3,8 @@ import { getCommand, isActionTag, isTag, isTagCommand, tagMessage } from "../../
 import { AllTags, Tag, TagParticipant } from "../../types";
 import { OnMessage } from "./on-message.type";
 import { environment } from "../../envs/environment.dev";
+import { getAllReminders, onCreateReminders, onNewRemind, reminders } from "../../services/reminder.service";
+import { REMINDERS } from "../../services/constants";
 
 export const onMessage = async (props: OnMessage) => {
   const { body, client, from, to } = props;
@@ -29,15 +31,32 @@ export const onMessage = async (props: OnMessage) => {
     "@me": environment.myNumber,
   };
 
-  // Reminders
+  //#region Reminders
   {
     if (!tagCommands.some((tag: AllTags) => isActionTag(tag))) return;
-    const reminderActions = tagCommands.filter(tag => isActionTag(tag));
+    const hasCreateReminder = tagCommands.filter((tag) => isActionTag(tag) && tag === "@reminder");
+    if (!hasCreateReminder) throw new Error("No onCreate Reminder found!");
+    const isAnonymous = message.toLowerCase().includes("Anonimo");
+
+    onNewRemind({
+      message,
+      from: isAnonymous ? "Anónimo" : from,
+      title: "Titulo",
+      date: "13 22 * * *",
+    });
+
+    console.log(`🤖 A21 BOT: Se ha añadido un nuevo recordatorio\nRecordatorios guardados: ${(function foo() {
+      for (let index = 0; index < reminders.length; index++) {
+        const reminder = reminders[index];
+        return `${index + 1} ~\nDe: ${reminder.from}\n"${reminder.title?.toUpperCase()}. ${reminder.message}"\n\n`;
+      }
+    })()}
+      `);
   }
 
+  //#endregion
 
-
-
+  return;
   const filterKey = tagCommands.find((tag) => isTag(tag)) as Tag;
 
   let selectedFilter = tags[filterKey || "@everyone"];
@@ -47,7 +66,6 @@ export const onMessage = async (props: OnMessage) => {
   const contacts = await Promise.all<Contact>(filteredMembers.map(async (contact) => await client.getContactById(contact.id._serialized)));
 
   if (contacts) {
-
     console.log("SENT MESSAGE", tagMessage(contacts, message));
     // const messageSent = await a21Group.sendMessage(tagMessage(contacts, message), { mentions: contacts });
   }
